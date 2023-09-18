@@ -12,6 +12,7 @@ const listURLs = [
   "nike.com.br",
   "adidas.com",
   "adidas.com.br",
+  "sc4mm3d.vercel.app",
 ];
 
 export default listURLs;

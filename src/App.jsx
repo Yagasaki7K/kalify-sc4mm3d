@@ -7,6 +7,15 @@ function App() {
     const [message, setMessage] = useState('Check that your link is not tampered with');
     const [language, setLanguage] = useState('EN-US')
 
+    function hiddenHowToWorks() {
+        const elementToRemove = document.getElementById('howWorks');
+        if (elementToRemove) {
+            elementToRemove.parentNode.removeChild(elementToRemove);
+        } else {
+            window.location.reload();
+        }
+    }
+
     function filterDomains(url) {
         const dominioRegex = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/g;
         const dominioMatch = dominioRegex.exec(url);
@@ -52,19 +61,22 @@ function App() {
                 }
             </form>
             <div className="howWorks">
-                <h3>{language === 'EN-US' ? 'How it Works?' : 'Como funciona?'}</h3>
-                <p>
-                    {language === 'EN-US' ?
-                        'Imagine that you have just received a link via email or from a shortener, directing you to a product that you are eager to purchase. However, the question arises: is this link legitimate? Don\'t worry!'
-                        :
-                        'Imagine que você acaba de receber um link por e-mail ou de um encurtador, direcionando para um produto que você está ansioso para adquirir. Porém, surge a dúvida: será que esse link é legítimo? Não se preocupe!'}
-                </p>
-                <p>
-                    {language === 'EN-US' ?
-                        'Our platform is here to clear up all uncertainties. We analyze the link in our database and if it receives the green markup, it is a sign that the link is safe. Otherwise, if it does not get this validation, it is better to consider it suspicious and we recommend that you avoid using it for shopping.'
-                        :
-                        'Nossa plataforma está aqui para esclarecer todas as incertezas. Analisamos o link em nosso banco de dados e se ele receber a marcação verde, é um sinal de que o link é seguro. Caso contrário, se ele não obtiver essa validação, é melhor considerá-lo suspeito e recomendamos que você evite utilizá-lo para fazer compras.'}
-                </p>
+                <h3><span onClick={hiddenHowToWorks} className="closeBtn">✕</span> {language === 'EN-US' ? 'How It Works?' : 'Como isso funciona?'}</h3>
+
+                <span id="howWorks">
+                    <p>
+                        {language === 'EN-US' ?
+                            'Imagine that you have just received a link via email or from a shortener, directing you to a product that you are eager to purchase. However, the question arises: is this link legitimate? Don\'t worry!'
+                            :
+                            'Imagine que você acaba de receber um link por e-mail ou de um encurtador, direcionando para um produto que você está ansioso para adquirir. Porém, surge a dúvida: será que esse link é legítimo? Não se preocupe!'}
+                    </p>
+                    <p id="howWorks">
+                        {language === 'EN-US' ?
+                            'Our platform is here to clear up all uncertainties. We analyze the link in our database and if it receives the green markup, it is a sign that the link is safe. Otherwise, if it does not get this validation, it is better to consider it suspicious and we recommend that you avoid using it for shopping. Remember, we only evaluate links for purchases'
+                            :
+                            'Nossa plataforma está aqui para esclarecer todas as incertezas. Analisamos o link em nosso banco de dados e se ele receber a marcação verde, é um sinal de que o link é seguro. Caso contrário, se ele não obtiver essa validação, é melhor considerá-lo suspeito e recomendamos que você evite utilizá-lo para fazer compras. Lembrando, apenas avaliamos links para compras'}
+                    </p>
+                </span>
                 <p>Developed by Kalify Inc</p>
             </div>
             <div className="buttons">
@@ -85,7 +97,7 @@ const MainDetails = styled.div`
     }
 
     h1 {
-        margin-top: 10rem;
+        margin-top: 5rem;
         font-weight: 800;
         font-size: 8rem;
     }
@@ -110,11 +122,19 @@ const MainDetails = styled.div`
     }
 
     .howWorks {
+        display: flex;
+        flex-direction: column;
         max-width: 45rem;
+        width: 45rem;
         margin-top: 2.5rem;
         font-size: 0.9rem;
         font-weight: 200;
         text-align: justify;
+
+        .closeBtn {
+            cursor: pointer;
+            color: #888;
+        }
     }
 
     .buttons {

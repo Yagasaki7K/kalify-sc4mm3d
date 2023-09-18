@@ -7,6 +7,11 @@ const listURLs = [
   "shopee.com",
   "shopee.com.br",
   "aliexpress.com",
+  "bestbuy.com",
+  "nike.com",
+  "nike.com.br",
+  "adidas.com",
+  "adidas.com.br",
 ];
 
 export default listURLs;

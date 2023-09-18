@@ -39,7 +39,7 @@ function App() {
 
     return (
         <MainDetails>
-            <h1 id="logo">SP4MM3D</h1>
+            <h1 id="logo">SC4MM3D</h1>
             <p className="message">{message}</p>
 
             <form onSubmit={(e) => { e.preventDefault(); checkLink(); }}>

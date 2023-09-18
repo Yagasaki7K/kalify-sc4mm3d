@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 function App() {
     const [getLink, setGetLink] = useState('');
     const [message, setMessage] = useState('Check that your link is not tampered with');
+    const [language, setLanguage] = useState('EN-US')
 
     function filterDomains(url) {
         const dominioRegex = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/g;
@@ -17,23 +18,20 @@ function App() {
         return null;
     }
 
-    const newDomain = filterDomains(getLink).toLowerCase();
-
-    console.log(newDomain); // Output: link.com.br
+    const newDomain = filterDomains(getLink);
 
     const checkLink = useCallback(() => {
-
         if (newDomain === '' || newDomain === null) {
-            setMessage('Check that your link is not tampered with');
+            { language === 'EN-US' ? setMessage('Check that your link is not tampered with') : setMessage('Verifique se o seu link não está modificado') }
             document.querySelector('#logo').style.color = '#fff';
-        } else if (listURLs.includes(newDomain)) {
-            setMessage('Keep calm, this link is safe!');
+        } else if (listURLs.some(domain => newDomain.includes(domain.toLowerCase()))) {
+            { language === 'EN-US' ? setMessage('Keep calm, this link is safe!') : setMessage('Fique calmo, este link é seguro!') }
             document.querySelector('#logo').style.color = '#70db90';
         } else {
-            setMessage('Hey! Be careful, this link is strange and could be a scam!');
+            { language === 'EN-US' ? setMessage('Hey! Be careful, this link is strange and could be a scam!') : setMessage('Ei! Tenha cuidado, este link é estranho e pode ser uma farsa!') }
             document.querySelector('#logo').style.color = '#db7070';
         }
-    }, [newDomain]);
+    }, [language, newDomain]);
 
     useEffect(() => {
         checkLink();
@@ -42,22 +40,37 @@ function App() {
     return (
         <MainDetails>
             <h1 id="logo">SP4MM3D</h1>
-            <p>{message}</p>
+            <p className="message">{message}</p>
 
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    checkLink();
-                }}
-            >
-                <input
-                    type="text"
-                    name="input"
-                    placeholder='https://www.amazon.com.br/Echo-Dot-5%C2%AA-gera%C3%A7%C3%A3o-Cor-Preta/dp/B09B8VGCR8/'
-                    value={getLink}
-                    onChange={(e) => setGetLink(e.target.value)}
-                />
+            <form onSubmit={(e) => { e.preventDefault(); checkLink(); }}>
+                {
+                    language === 'EN-US' ?
+                        (<input type="text" name="input" placeholder='Write or paste here the link of the store or product that is in doubt'
+                            value={getLink} onChange={(e) => setGetLink(e.target.value)} />) :
+                        (<input type="text" name="input" placeholder='Escreva ou cole aqui o link da loja ou produto que está em dúvida'
+                            value={getLink} onChange={(e) => setGetLink(e.target.value)} />)
+                }
             </form>
+            <div className="howWorks">
+                <h3>{language === 'EN-US' ? 'How it Works?' : 'Como funciona?'}</h3>
+                <p>
+                    {language === 'EN-US' ?
+                        'Imagine that you have just received a link via email or from a shortener, directing you to a product that you are eager to purchase. However, the question arises: is this link legitimate? Don\'t worry!'
+                        :
+                        'Imagine que você acaba de receber um link por e-mail ou de um encurtador, direcionando para um produto que você está ansioso para adquirir. Porém, surge a dúvida: será que esse link é legítimo? Não se preocupe!'}
+                </p>
+                <p>
+                    {language === 'EN-US' ?
+                        'Our platform is here to clear up all uncertainties. We analyze the link in our database and if it receives the green markup, it is a sign that the link is safe. Otherwise, if it does not get this validation, it is better to consider it suspicious and we recommend that you avoid using it for shopping.'
+                        :
+                        'Nossa plataforma está aqui para esclarecer todas as incertezas. Analisamos o link em nosso banco de dados e se ele receber a marcação verde, é um sinal de que o link é seguro. Caso contrário, se ele não obtiver essa validação, é melhor considerá-lo suspeito e recomendamos que você evite utilizá-lo para fazer compras.'}
+                </p>
+                <p>Developed by Kalify Inc</p>
+            </div>
+            <div className="buttons">
+                <button onClick={() => setLanguage('PT-BR')}>Português</button>
+                <button onClick={() => setLanguage('EN-US')}>English</button>
+            </div>
         </MainDetails>
     );
 }
@@ -65,33 +78,48 @@ function App() {
 export default App;
 
 const MainDetails = styled.div`
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;700;800;900&display=swap');
 
-  h1, p, form {
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  h1 {
-    font-weight: 800;
-    font-size: 8rem;
-  }
-
-  p {
-    font-weight: 200;
-    margin-top: -6rem;
-  }
-
-  form {
-    input {
-      height: 0.8rem;
-      width: 30rem;
-      border-radius: 5px;
-      border: none;
-      padding: 1rem;
-
-      &:focus {
-        outline: none;
-      }
+    h1, p, form {
+        font-family: 'Montserrat', sans-serif;
     }
-  }
+
+    h1 {
+        margin-top: 10rem;
+        font-weight: 800;
+        font-size: 8rem;
+    }
+
+    .message {
+        font-weight: 200;
+        margin-top: -6rem;
+    }
+
+    form {
+        input {
+            height: 0.8rem;
+            width: 30rem;
+            border-radius: 5px;
+            border: none;
+            padding: 1rem;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    .howWorks {
+        max-width: 45rem;
+        margin-top: 2.5rem;
+        font-size: 0.9rem;
+        font-weight: 200;
+        text-align: justify;
+    }
+
+    .buttons {
+        button {
+            margin-right: 1rem;
+        }
+    }
 `;
